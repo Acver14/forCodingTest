@@ -38,7 +38,7 @@ int main(){
                 cnt++;
             }
         }
-        if (!check[x / 2])\
+        if (!check[x / 2])
 			cout << cnt / 2 + 1 << '\n';
 		else
 			cout << cnt / 2 << '\n';
