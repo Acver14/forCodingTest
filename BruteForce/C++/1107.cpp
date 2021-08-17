@@ -1,97 +1,52 @@
 //2021.08.16
-#include <iostream>
-#include <vector>
+//retry at 2021.07.17
+#include<iostream>
+#include<cmath>
 using namespace std;
 
-long long goToN(int n, int broken[10])
-{
-    int N = n;
-    long long click = 0;
-    int ret = 100;
-    long long cnt = -1;
-    while (N != 0)
-    {
-        cnt++;
-        int a = N % 10;
-        N /= 10;
-        if (!broken[a])
-        {
-            click++;
-            int temp = 1;
-            for (int j = 0; j < cnt; j++)
-            {
-                temp *= 10;
-            }
-            ret -= (ret%temp)/temp*temp;
-            ret += a * temp;
-            continue;
-        }
-        else
-        {
-            for (int j = 1;; j++)
-            {
-                if (!broken[a + j])
-                {
-                    int temp = 1;
-                    for (int j = 0; j < cnt; j++)
-                    {
-                        temp *= 10;
-                    }
-                    ret -= (ret%temp)/temp*temp;
-                    cout << temp << '\n';
-                    cout << (ret%temp)*temp << '\n';
-                    ret += (a + j) * temp;
-                    cout << ret << '\n';
-                    cout << "--------'\n";
+bool broken[10];
+int channel = 100;
+int target;
 
-                    click++;
-                    break;
-                }
-                else if (!broken[a - j])
-                {
-                    int temp = 1;
-                    for (int j = 0; j < cnt; j++)
-                    {
-                        temp *= 10;
-                    }
-                    ret -= (ret%temp)/temp*temp;
-                    ret += (a - j) * temp;
-                    click++;
-                    break;
-                }
-            }
-        }
+int goToTarget(int n){
+    if(n == 0){
+        if(broken[0]) return 0;
+        else return 1;
     }
-    if (ret > n)
-        click += ret - n;
-    else
-        click += n - ret;
-    return click;
+    int len = 0;
+    while (n > 0) {
+        if (broken[n % 10]) return 0;
+        n = n / 10;
+        len += 1;
+    }
+
+    return len;
 }
 
-int main()
-{
-    int channel = 100;
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(nullptr);
     int n;
-    int ans = 0;
+    cin >> target;
     cin >> n;
-    int m;
-    cin >> m;
-    int broken[10];
-    for (int i = 0; i < m; i++)
-    {
-        int input;
-        cin >> input;
-        broken[input] = true;
+    for(int i = 0; i < n; i++){
+        int a;
+        cin >> a;
+        broken[a] = true;
     }
-    if (n-channel == 0)
-    {
-        cout << ans;
-        return 0;
-    }else if(n-channel < 4){
-        cout << n-channel;
-        return 0;
+    int result;
+
+    result = abs(channel-target);
+    for(int i = 0; i <= 1000000; i++){
+        int c = i;
+        int click = goToTarget(c);
+        if(click > 0){
+            int press = abs(target-c);
+            if(result > press + click){
+                result = press + click;
+            }
+        }
     }
-    cout << goToN(n, broken);
-    return 0;
+
+    cout << result;
 }
