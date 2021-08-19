@@ -79,7 +79,7 @@ int main(){
     }
     
     for(int i = 0; i < n-1; i++){
-        for(int j = 0; j < n-2; j++){
+        for(int j = 0; j < m-2; j++){
             int sum = a[i][j] + a[i][j+1] + a[i][j+2] + a[i+1][j+1];
             if(sum > result) result = sum;
             sum = a[i+1][j] + a[i+1][j+1] + a[i+1][j+2] + a[i][j+1];
@@ -88,7 +88,7 @@ int main(){
     }
 
     for(int i = 0; i < n-2; i++){
-        for(int j = 0; j < n-1; j++){
+        for(int j = 0; j < m-1; j++){
             int sum = a[i][j] + a[i+1][j] + a[i+2][j] + a[i+1][j+1];
             if(sum > result) result = sum;
             sum = a[i][j+1] + a[i+1][j+1] + a[i+2][j+1] + a[i+1][j];
