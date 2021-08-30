@@ -7,6 +7,7 @@ using namespace std;
 
 vector<int> pos;
 vector<int> A;
+vector<vector<int> > s;
 
 int findMax(int a, int b){
     if(a > b) return a;
