@@ -27,17 +27,23 @@ bool checkPoint(point p){
 
 bool dfs(point start, point x, int c, int cnt){
     a[x._x][x._y] = 0;
+    bool ret = false;
     for(int i = 0; i < 4; i++){
         if(cnt > 2){
-            if(start._x == x._x+dx[i] && start._y == x._y+dy[i]) return true;
-        }
-        if(!checkPoint(x)) continue;
-        if(a[x._x+dx[i]][x._y+dy[i]] == c){
-            a[x._x+dx[i]][x._y+dy[i]] = 0;
-            return dfs(start, point(x._x+dx[i], x._y+dy[i]), c, cnt+1);
+            if(start._x == x._x+dx[i] && start._y == x._y+dy[i]) {
+                return true;
+            }
         }
     }
-    return false;
+    for(int i = 0; i < 4; i++){
+        if(!checkPoint(point(x._x+dx[i], x._y+dy[i]))) continue;
+        if(a[x._x+dx[i]][x._y+dy[i]] == c){
+            a[x._x+dx[i]][x._y+dy[i]] = 0;
+            ret = dfs(start, point(x._x+dx[i], x._y+dy[i]), c, cnt+1);
+            if(ret) return ret;
+        }
+    }
+    return ret;
 }
 
 int main(){
@@ -55,7 +61,7 @@ int main(){
     }
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
-            if(a[i][j] > 0){
+            // if(a[i][j] > 0){
                 point p(i, j);
                 bool result = dfs(p, p, a[i][j], 0);
                 if(result) {
@@ -67,7 +73,7 @@ int main(){
                         a[l][k] = A[l][k];
                     }
                 }
-            }
+            // }
         }
     }
     cout << "No" << '\n';
