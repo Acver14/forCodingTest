@@ -5,32 +5,37 @@
 using namespace std;
 
 int n;
-int dl[20];
-int dr[20];
 
 class Node{
 public:
     int left;
     int right;
-    int pos;
-    int level;
 };
-vector<int> d[20];
 
-Node tree[10001];
-void inorder(int x, int pos, int level){
+vector<Node> tree;
+vector<int> node[10001];
+int col_cnt = 0;
+vector<int> col;
+int level = 0;
+
+void inorder(int x, int _level){
     if(x == -1) return;
-    inorder(tree[x].left, pos-1, level+1);
-    tree[x].pos = pos; tree[x].level = level;
-    d[level].push_back(pos);
-    cout << x << " : " << pos << ' ';
-    inorder(tree[x].right, pos+1, level+1);
+    inorder(tree[x].left, _level+1);
+    col[x] = ++col_cnt;
+    node[_level].push_back(x);
+    inorder(tree[x].right, _level+1);
+    if(level < _level) level = _level;
 }
 
 
 int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(nullptr);
+
     cin >> n;
-    int cnt[10001];
+    vector<int> cnt(n+1);
+    tree.resize(n+1);
+    col.resize(n+1);
     int root;
     for(int i = 0; i < n; i++){
         int p, l, r;
@@ -44,32 +49,22 @@ int main(){
         if(cnt[i] == 0) root = i;
     }
 
-    inorder(root, 0, 0);
-    cout << '\n';
-    int ans_width = 0;
-    int ans_level = 0;
-
-    cout << '\n';
-    for(int i = 0; i < 20; i++){
-        if(d[i].empty()) break;
-        for(int v: d[i]){
-            cout << v << ' ';
-        }
-        cout << '\n';
-    }
-    cout <<'\n';
-
-    for(int i = 0; i < 20; i++){
-        int size = d[i].size();
-        if(d[i].empty()) break;
-        sort(d[i].begin(), d[i].end());
-        int width = d[i][d[i].end()-d[i].begin()] - d[i][0]+1;
-        cout << i << ' ' << d[i][d[i].end()-d[i].begin()] << ' ' << d[i][0] << '\n';
-        if(ans_width < width) {
-            ans_width = width;
-            ans_level = i;
+    inorder(root, 1);
+    int ans = 1;
+    int idx = 1;
+    for(int i = 0; i <= level; i++){
+        int size = node[i].size();
+        for(int j = 0; j < size; j++){
+            for(int k = 1; k < size; k++){
+                int comp = abs(col[node[i][j]] - col[node[i][k]]) + 1;
+                if(ans < comp) {
+                    ans = comp;
+                    idx = i;
+                }
+            }
         }
     }
-    cout << ans_level << ' ' << ans_width;
+    cout << idx << ' ' << ans;
+
     return 0;
 }
