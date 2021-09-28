@@ -1,75 +1,45 @@
 //2021.09.24
-// 퀸이 공격하지 못 하는 경우
-// x 가 동일
-// y 가 동일
-// 대각선에 위치할 때 -> x와 y의 차이값이 동일할 때
 #include<iostream>
-#include<vector>
 using namespace std;
 
-bool board[15][15] = {false, };
-int n;
-bool posX[15] = {false, };
-bool posY[15] = {false, };
-int ans = 0;
 int cnt = 0;
+int n;
+int board[15];
 
-bool checkQ(int x, int y){
-    if(posX[x] || posY[y]) return false;
-    return true;
+// 유망한지 판단하는 함수
+int promising(int cdx) {
+
+	// 같은 열이면 안되고, 대각선상에 있어서도 안 된다.
+	for (int i = 0; i < cdx; i++) {
+		if (board[cdx] == board[i] || cdx - i == abs(board[cdx] - board[i])) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
-void go(){
-    if(cnt == n) {
-        ans++;
-        cout << ans << '\n';
-        return;
-    }
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            if(board[i][j] == false && checkQ(i,j)){
-                cout << i << ' ' << j << '\n';
-                board[i][j] = true;
-                posX[i] = posY[j] = true;
-                int k = 1;
-                int t = 1;
-                while(true){
-                    bool flag = false;
-                    if(i-k > -1 && j-t > -1) {
-                        board[i-k][j-t] = true;
-                        flag = true;
-                    }
-                    if(i+k < n && j+t < n) {
-                        board[i+k][j+t] = true;
-                        flag = true;
-                    }
-                    k++; t++;
-                    if(flag == false) break;
-                }
-                cnt++;
-                go();
-                cnt--;
-                board[i][j] = false;
-                while(true){
-                    bool flag = false;
-                    if(i-k > -1 && j-t > -1) {
-                        board[i-k][j-t] = false;
-                        flag = true;
-                    }
-                    if(i+k < n && j+t < n) {
-                        board[i+k][j+t] = false;
-                        flag = true;
-                    }
-                    if(flag == false) break;
-                }
-                posX[i] = posY[j] = false;
-            }
-        }
-    }
+// nqueen 알고리즘 수행
+void nqueen(int cdx) {
+
+	// cdx가 마지막 행까지 수행하고 여기까지 오면, 찾기 완료
+	if (cdx == n) {
+		cnt++;
+		return;
+	}
+
+	for (int i = 0; i < n; i++) {
+		board[cdx] = i; // cdx번째 행, i번째 열에 queen을 놓아본다.	
+		// 이후 그 행에 둔 것에 대한 유망성을 판단한다.
+		if (promising(cdx)) { // 그 자리에 두어도 괜찮았다면,
+			nqueen(cdx + 1); // 그 다음 행에 대해 퀸을 놓는 것을 해 본다.
+		}
+	}
 }
 
-int main(){
-    cin >> n;
-    go();
-    cout << ans;
+int main() {
+
+	cin >> n;
+	nqueen(0);
+	cout << cnt << '\n';
+    return 0;
 }
