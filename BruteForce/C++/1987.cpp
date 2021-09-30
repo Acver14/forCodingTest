@@ -26,7 +26,7 @@ public:
 };
 
 bool isInBoard(int x, int y){
-    if(x < 0 || x >= r || x < 0 || y >= c) return false;
+    if(x < 0 || x >= r || y < 0 || y >= c) return false;
     return true;
 }
 
@@ -35,10 +35,11 @@ void go(pos p){
     for(int i = 0; i < 4; i++){
         int nx = p.x + dx[i];
         int ny = p.y + dy[i];
-        if(isInBoard(nx, ny) && check['A'-a[nx][ny]] == false){
-            check['A'-a[nx][ny]] = true;
+        if(isInBoard(nx, ny)){
+            if(check[a[nx][ny] - 'A']) continue;
+            check[a[nx][ny] - 'A'] = true;
             go(pos(nx, ny, p.d+1));
-            check['A'-a[nx][ny]] = false;
+            check[a[nx][ny] - 'A'] = false;
         }
     }
 }
@@ -50,6 +51,8 @@ int main(){
             cin >> a[i][j];
         }
     }
-    go(pos(0, 0, 0));
-    cout << ans-1;
+
+    check[a[0][0]-'A'] = true;
+    go(pos(0, 0, 1));
+    cout << ans;
 }
