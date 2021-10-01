@@ -181,6 +181,7 @@ int move(pos r, pos b, int dir){
 void go(){
     for(int i = 0; i < 4; i++){
         int result = move(R, B, i);
+        cout << result << '\n';
         if(result == 1){
             if(ans > cnt) ans = cnt;
             cout << cnt << '\n';
