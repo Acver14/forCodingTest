@@ -78,6 +78,8 @@ void buildWall(int cnt){
 }
 
 int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(nullptr);
     cin >> n >> m;
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
@@ -87,6 +89,5 @@ int main(){
         }
     }
     buildWall(0);
-    cout << ans << ' ' << non_safe << '\n';
     cout << n*m - ans - non_safe - wall;
 }
