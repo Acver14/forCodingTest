@@ -1,4 +1,3 @@
-//2021.10.14
 #include<iostream>
 #include<queue>
 #include<vector>
@@ -7,79 +6,81 @@ using namespace std;
 class point{
 public:
     int x, y, sec;
-    point(int X, int Y, int S){
-        x = X; y = Y, sec = S;
+    point(){
+        x = y = sec = -1;
+    }
+    point(int a, int b, int c){
+        x = a;
+        y = b;
+        sec = c;
     }
 };
 
-const int n = 8;
-char a[8][8];
-vector<pair<int, int> > wall;
-bool check[8][8][8];
+char board[8][8];
+bool check[8][8];
+int dx[] = {-1, 1, 0, 0, -1, 1, -1, 1, 0};
+int dy[] = {0, 0, -1, 1, -1, -1, 1, 1, 0};
+bool existWall = true;
 
-int dx[] = {-1, 1, -1, 1, 1, -1, 0, 0};
-int dy[] = {0, 0, -1 ,1, -1, 1, -1, 1};
-
-void moveWall(){
-    int size = wall.size();
-    cout << "size : " << size << '\n';
-    for(int i = 0; i < size; i++){
-        cout << wall[i].first+1 << ' ' << wall[i].second << ' ' << n << '\n';
-        a[wall[i].first][wall[i].second] = '.';
-        if(wall[i].first+1 < n) {
-            wall[i].first = wall[i].first+1;
-            // a[wall[i].first+1][wall[i].second] = '#';
-        }
-        else wall.erase(wall.begin()+i);
-    }
-}
-
-bool isIn(int x, int y){
-    if(x < 0 || x >= n || y < 0 || y >= n) return false;
+bool isPossible(point p){
+    if(p.x < 0 || p.y < 0 || p.x > 7 || p.y > 7 || board[p.x][p.y] == '#') return false;
     return true;
 }
 
-int bfs(){
-    queue<point> q;
-    q.push(point(7,0,0));
-    int now = 0;
-    int sec = 0;
-    while(!q.empty()){
-        point node = q.front(); q.pop();
-        // cout << sec << ' ' << node.x << ' ' << node.y << '\n';
-        if(now != node.sec && !wall.empty()){
-            moveWall();
-            now = node.sec;
-            sec = node.sec;
-        }
-        if(a[node.x][node.y] == '#') continue;
-        if(node.x == 0 && node.y == 7) return 1;
-        for(int i = 0; i < 8; i++){
-            int nx = node.x + dx[i];
-            int ny = node.y + dy[i];
-            if(isIn(nx, ny) && check[nx][ny][sec] == false){
-                check[nx][ny][sec] = true;
-                q.push(point(nx, ny, node.sec+1));
+void moveWall(){
+    existWall = false;
+    for(int j = 7; j > -1; j--){
+        if(board[7][j] == '#') board[7][j] = '.';
+    }
+    for(int i = 6; i > -1 ; i--){
+        for(int j = 7; j > -1; j--){
+            if(board[i][j] == '#'){
+                board[i][j] = '.';
+                board[i+1][j] = '#';
+                existWall = true;
             }
         }
-        q.push(point(node.x, node.y, node.sec+1));
     }
-    return 0;
 }
 
+bool bfs(){
+    queue<point> q;
+    q.push(point(7, 0, 0));
+    int now = 0;
+    while(!q.empty()){
+        point node = q.front();
+        q.pop();
+        if(now != node.sec){
+            now = node.sec;
+            if(existWall) moveWall();
+        }
+        if(board[node.x][node.y] == '#') continue;
+        if(node.x == 0 && node.y == 7) return true;
+        for(int i = 0; i < 9; i++){
+            point next = point(node.x+dx[i], node.y+dy[i], node.sec+1);
+            if(isPossible(next)){
+                if(existWall) q.push(next);
+                else {
+                    if(check[next.x][next.y]) continue;
+                    check[next.x][next.y] = true;
+                    q.push(next);
+                }
+            }
+        }   
+    }
+    return false;
+}
 
 int main(){
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            cin >> a[i][j];
-            if(a[i][j] == '#') wall.push_back(make_pair(i, j));
+    ios_base::sync_with_stdio(0);
+    cin.tie(nullptr);
+
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            cin >> board[i][j];
         }
     }
-    for(auto w: wall){
-        cout << w.first << ' ' << w.second << '\n';
-    }
-    cout << wall.size() << '\n';
-    int result = bfs();
-    cout << result;
-    return 0;
+    bool result = bfs();
+    if(result) cout << 1;
+    else cout << 0;
 }
