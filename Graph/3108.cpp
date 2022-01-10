@@ -51,7 +51,7 @@ int main(){
             else {
                 make_union(i, j);
             }
-        }
+        } 
     }
 
     set<int> s;
