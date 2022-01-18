@@ -27,8 +27,8 @@ int main(){
         cin >> a[0][i] >> a[1][i] >> c[0][i] >> c[1][i];
     }
 
-    dfs(a, ab);
-    dfs(c, cd);
+    go(a, ab);
+    go(c, cd);
     sort(ab.begin(), ab.end());
 
     long long ans = 0;
