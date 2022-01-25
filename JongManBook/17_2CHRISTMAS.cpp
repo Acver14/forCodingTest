@@ -1,73 +1,68 @@
-//2022.01.24
-#include<iostream>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstring>
 using namespace std;
 
-int k;
-int n;
-int d[100000];
-int sum[100000];
-int dp[100000];
+int waysToBuy(vector<int> &psum, int K){
+	const int MOD = 20091101;
+	int result = 0;
 
-int findMax(int a, int b){
-    if(a > b) return a;
-    return b;
+	vector<long long> count(K, 0);
+	for (int i = 0; i < psum.size(); i++)
+		count[psum[i]]++;
+
+	for (int i = 0; i < K; i++)
+		if (count[i] >= 2)
+
+			result = (result + ((count[i] * (count[i] - 1)) / 2)) % MOD;
+
+	return result;
 }
 
-long long orderGiftOne(){
-    long long ans = 0;
-    for(int i = n-1; i >= 0; i--){
-        for(int j = i; j >= 0; j--){
-            if(j == i){
-                if(sum[i] % k == 0) ans++;
-            }else{
-                if((sum[i] - sum[j]) % k == 0) ans++;
-            }
-            ans %= 20091101;
+int maxBuys(vector<int> &psum,int K){
+	vector<int> result(psum.size(),0);
+	vector<int> previous(K,-1);
+	
+	for (int i = 0; i < psum.size(); i++)
+	{
+		if (i > 0)
+			result[i] = result[i - 1];
+		else
+			result[i] = 0;
+		
+		int loc = previous[psum[i]];
+
+		if (loc != -1)
+			result[i] = max(result[i], result[loc] + 1);
+			previous[psum[i]] = i;
+        
         }
-    }
-    return ans;
+	return result.back();
 }
 
-int orderGifts(){
-    if(sum[0] % k == 0) dp[0] = 1;
-    else dp[0] = 0;
-    
-    int ret = dp[0];
+int main() {
+	int T;
+	cin >> T;
 
-    for(int i = 1; i < n; i++){
-        for(int j = 0; j < i; j++){
-            if((sum[i] - sum[j]) % k == 0){
-                dp[i] = dp[j]+1;
-                ret = findMax(dp[i], ret);
-            }
-        }
-    }
-    return ret;
-}
+	for(int i = 0;i<T;i++){
+		int N,K;
+		cin >> N >> K;
+		vector<int> D(N);
 
+		for(int j = 0;j<N;j++){
+			cin >> D[j];	
+		}
+		
+		vector<int> psum(N+1);
+		psum[0] = 0;
+		
+		for(int z = 1;z<=N;z++){
+			psum[z] = (psum[z-1] + D[z-1]) % K;	
+		}
 
-void init(){
-    for(int i = 0; i < 100000; i++){
-        d[i] = sum[i] = 0;
-        dp[i] = 0;
-    }
-}
-
-int main(){
-    ios_base::sync_with_stdio(0);
-    cin.tie(nullptr);
-
-    int t;
-    cin >> t;
-    for(int i = 0; i < t; i++){
-        init();
-        cin >> n >> k;
-        for(int  j = 0; j < n; j++){
-            cin >> d[j];
-            sum[j] = (j!=0?sum[j-1]:0) + d[j];
-        }
-
-        cout << orderGiftOne() << ' ' << orderGifts() << '\n';
-    }
-
+		cout << waysToBuy(psum,K) << " "<< maxBuys(psum,K) << endl;
+		
+	}	
+	return 0;
 }
