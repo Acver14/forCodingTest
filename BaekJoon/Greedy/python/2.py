@@ -2,10 +2,10 @@ str = input()
 
 ans = 0
 for i in range(len(str)):
-    if(str[i]=='0'):
-        continue
+    num = int(str[i])
+    if num <= 1 or ans <= 1:
+        ans += num
     else:
-        if(ans == 0): ans += int(str[i])
-        else: ans *= int(str[i])
+        ans *= num
         
 print(ans)
