@@ -15,28 +15,56 @@
 # 출력
 # 첫째 줄에 문제의 정답을 출력한다.
 
+from collections import deque
+
 n, m = map(int, input().split())
 rm = list(map(int, input().split()))
+arr = deque([i for i in range(1, n+1)])
+
+ans = 0
+_add = 0
+_sub = 0
+for r in rm:
+    while True:
+        if r == arr[0]:
+            arr.popleft()
+            break
+        else:
+            if arr.index(r) > len(arr)/2:
+                while r != arr[0]:
+                    _add += 1
+                    arr.appendleft(arr.pop())
+            else:
+                while r != arr[0]:
+                    _sub += 1
+                    arr.append(arr.popleft())
+    print(len(arr), r, _add, _sub)
+                 
+print(_add+_sub)
+
 
 add = 0
 sub = 0
 pop = 0
-for i in rm:
 
-    i += add - sub - pop
-    if i > n:
-        i -= n
-    elif i < 1:
+for i in rm:
+    i += add - sub - pop-1
+    if i > n-1:
+        i %= n
+    while i < 0:
         i += n
-    print(i, n, end = ' ')
-    if i == 1:
-        continue
-    elif i > n/2:
-        add += n - i + 1
-    else:
-        sub += i - 1
-    pop += 1
-    n -= 1
         
-    print('+ : '+str(add) + ' - : ' + str(sub))
+    if i == 0:
+        pop += 1
+        n -= 1
+    elif i > n/2:
+        add += n - i
+        pop += 1
+        n -= 1
+    else:
+        sub += i
+        pop += 1
+        n -= 1
+    print(n, i, add, sub)
+        
 print(add+sub)
