@@ -21,26 +21,26 @@ n, m = map(int, input().split())
 rm = list(map(int, input().split()))
 arr = deque([i for i in range(1, n+1)])
 
-ans = 0
-_add = 0
-_sub = 0
-for r in rm:
-    while True:
-        if r == arr[0]:
-            arr.popleft()
-            break
-        else:
-            if arr.index(r) > len(arr)/2:
-                while r != arr[0]:
-                    _add += 1
-                    arr.appendleft(arr.pop())
-            else:
-                while r != arr[0]:
-                    _sub += 1
-                    arr.append(arr.popleft())
-    print(len(arr), r, _add, _sub)
+# ans = 0
+# _add = 0
+# _sub = 0
+# for r in rm:
+#     while True:
+#         if r == arr[0]:
+#             arr.popleft()
+#             break
+#         else:
+#             if arr.index(r) > len(arr)/2:
+#                 while r != arr[0]:
+#                     _add += 1
+#                     arr.appendleft(arr.pop())
+#             else:
+#                 while r != arr[0]:
+#                     _sub += 1
+#                     arr.append(arr.popleft())
+#     print(len(arr), r, _add, _sub)
                  
-print(_add+_sub)
+# print(_add+_sub)
 
 
 add = 0
