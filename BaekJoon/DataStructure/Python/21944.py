@@ -7,13 +7,13 @@ from collections import defaultdict
 N = int(input())
 max_heap = defaultdict([])
 min_heap = defaultdict([])
-total_heap = []
+total_max_heap = []
 in_list = defaultdict(bool)
 for _ in range(N):
     P, L, G = map(int, input().split())
     heappush(min_heap[G],[L,P])
     heappush(max_heap[G], [-L,-P])
-    heappush(total_heap, [L,P])
+    heappush(total_max_heap, [L,P])
     in_list[P] = True
 
 M = int(input())
