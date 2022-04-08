@@ -14,3 +14,4 @@ heapq
 Counter
 datetime
 timedelta
+a 와 b의 대칭 차집합 : set(a) ^ set(b)
