@@ -1,41 +1,37 @@
-from sys import stdin
-import heapq as h
-input = stdin.readline
+# https://black-hair.tistory.com/101
+import sys
+import heapq
+from collections import deque
 
-n = int(input().rstrip())
-heap = []
-t = []
-for _ in range(n):
-    t.append(list(map(int, input().rstrip().split())))
-    
-t.sort(key=lambda x:(x[0], x[1]))
+START, END = 0, 1
+N = int(sys.stdin.readline().strip())
+time_set = [list(map(int, sys.stdin.readline().split()))for _ in range(N)]
+time_set.sort(key=lambda x: (x[START], x[END]))
+time_set = deque(time_set)
+computers = []      #heap
+empty = [i for i in range(N)]
+heapq.heapify(empty)            #사용할 수 있는 컴퓨터
+tick = -1
+count = [0 for _ in range(N)]
+answer = [0]            # 0번은 갯수 1번부터 사용한 횟수
 
-com = 0
-seat = []
-for i in t:
-    min_seat = 100001
-    while heap:
-        print(heap, i)
-        item = h.heappop(heap)
-        if item[0] < i[0]:
-            # h.heappush(heap, (i[1], i[0], item[2]))
-            # seat[item[2]] += 1
-            if min_seat > item[2]: min_seat = item[2]
-        else:
-            if min_seat == 100001:
-                seat.append(1)
-                h.heappush(heap, item)
-                h.heappush(heap, (i[1], i[0], com))
-                com += 1
-            else:
-                h.heappush(heap, (i[1], i[0], min_seat))
-                print('hi',heap)
-            break
-    if not heap:
-        h.heappush(heap, (i[1], i[0], com))
-        seat.append(1)
-        com += 1
-        
-print(com)
-for i in seat:
-    print(i, end=' ')
+while time_set:
+    tick += 1
+    if tick == time_set[0][START]:
+        temp = time_set.popleft()
+        idx = heapq.heappop(empty)
+        heapq.heappush(computers, [temp[END], temp[START], idx])
+        count[idx] += 1
+    if computers and computers[0][0] == tick:
+        s, e, i = heapq.heappop(computers)
+        heapq.heappush(empty, i)
+
+for i in count:
+    if i == 0:
+        break
+    else:
+        answer.append(i)
+        answer[0] += 1
+
+print(answer[0])
+print(*answer[1:])
