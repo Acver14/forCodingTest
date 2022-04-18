@@ -19,3 +19,4 @@ Counter
 datetime
 timedelta
 a 와 b의 대칭 차집합 : set(a) ^ set(b)
+sys.setrecursionlimit(1000000) : 재귀 횟수 최댓값 변경
