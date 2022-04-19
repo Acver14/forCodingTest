@@ -10,7 +10,7 @@
 ### Tree
 순회
 단절점과 단전선 - https://justicehui.github.io/hard-algorithm/2019/01/06/ArticulationPoint/
-
+순회를 통한 그래프 복원 - https://8iggy.tistory.com/112
 
 # PYTHON LIBRARY
 defaultdict
