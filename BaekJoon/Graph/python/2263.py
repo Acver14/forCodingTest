@@ -1,16 +1,26 @@
-from sys import stdin
-input = stdin.readline
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
 
-def post_in_to_pre(post_list, in_list):
-    if post_list:
-        root = post_list[-1]
-        print(in_list)
-        mid = in_list.index(root)
-        print(root, end=" ")
-        post_in_to_pre(post_list[1:mid + 1], in_list[:mid])
-        post_in_to_pre(post_list[mid + 1:], in_list[mid + 1:])
-        
 n = int(input())
-in_order = list(map(int, input().rstrip().split()))
-post_order = list(map(int, input().rstrip().split()))
-post_in_to_pre(post_order, in_order)
+inorder = list(map(int,input().split()))
+postorder = list(map(int,input().split()))
+position = [0]*(n+1)
+for i in range(n):
+    position[inorder[i]] = i
+
+def preorder(istart, iend, pstart, pend):
+    if istart > iend or pstart > pend:
+        return
+
+    root = postorder[pend]
+    print(root, end=' ')
+
+    left_cnt = position[root] - istart
+    right_cnt = iend - position[root]
+
+    preorder(istart, position[root]-1, pstart, pstart+left_cnt-1)
+    preorder(position[root]+1, iend, pend-right_cnt, pend-1)
+
+
+preorder(0, n-1, 0, n-1)
