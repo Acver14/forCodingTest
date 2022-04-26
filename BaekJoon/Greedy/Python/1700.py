@@ -4,33 +4,30 @@ input = sys.stdin.readline
 n, k = map(int, input().split())
 klist = list(map(int, input().split()))
 
-par = [102] * k
-for k in range(len(klist)):
-    for i in range(k+1, len(klist)):
-        if klist[k] == klist[i]:
-            par[k] = i
-            break
-
 tab = [0] * n
-cnt = 0
-for k in range(len(klist)):
+ans = 0
+
+
+for i in range(len(klist)):
     clear = False
-    if klist[k] in tab:
+    if klist[i] in tab:
         continue
-    for i in range(len(tab)):
-        if tab[i] == 0:
-            tab[i] = klist[k]
+    for l in range(len(tab)):
+        if tab[l] == 0:
+            tab[l] = klist[i]
             clear = True
             break
     if not clear:
-        max = -1
-        for i in range(k-n, k):
-            if par[i] > max:
-                max = i
-        idx = 0
-        if max != -1:
-            idx = tab.index(klist[max])
-        tab[idx] = klist[k]
-        cnt += 1
-        continue
-print(cnt)
+        val, lastidx = 0, 0
+        for j in range(0, n):
+            cnt = 0
+            for l in range(i+1, k):
+                if tab[j] == klist[l]:
+                    break
+                cnt += 1
+        if cnt > lastidx:
+            val = j
+            lastidx = cnt
+        ans += 1
+        tab[val] = klist[i]
+print(ans)
