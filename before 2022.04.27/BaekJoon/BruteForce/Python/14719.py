@@ -15,3 +15,5 @@ for i in range(1, w - 1):
         ans += compare - world[i]
 
 print(ans)
+
+# https://seongonion.tistory.com/115
