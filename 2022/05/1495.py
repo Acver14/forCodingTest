@@ -17,6 +17,5 @@ for i in range(1, n):
                 dp[i][j+v[i]] = j+v[i]
             if j-v[i] >= 0:
                 dp[i][j-v[i]] = j-v[i]
-for i in range(n):
-    print(dp[i])
+
 print(max(dp[n-1]))
