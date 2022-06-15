@@ -1,13 +1,16 @@
 n = int(input())
-dp = [[0] * 3 for _ in range(10)]
-dp[2][1] = 1
-dp[2][2] = 1
-dp[3][0] = 2
-dp[3][1] = 2
-dp[3][2] = 2
 
-for i in range(4, n+1):
-    dp[i][0] = dp[i-1][1] + dp[i-1][2]
-    dp[i][1] = sum(dp[i-2]) + sum(dp[i-3])
-    dp[i][2] = dp[i][1]
-print(sum(dp[n]))
+ans = 0
+def dfs(sum, idx):
+    global ans
+    if idx == n:
+        if sum % 3 == 0:
+            ans += 1
+        return
+    dfs(sum * 10 + 0, idx + 1)
+    dfs(sum * 10 + 1, idx + 1)
+    dfs(sum * 10 + 2, idx + 1)
+    
+dfs(1, 1)
+dfs(2, 1)
+print(ans)
