@@ -2,23 +2,20 @@ n = int(input())
 arr = []
 for _ in range(n-1):
     arr.append(list(map(int, input().split())))
-if n == 1:
-    arr.append(list(map(int, input().split())))
 k = int(input())
 
-INF = 21000000000
-dp = [[INF] * (2) for _ in range(20)]
+ans = 10**9
+def dfs(isK, idx, sum):
+    global ans
+    if sum >= ans or idx >= n:
+        return
+    if idx == n-1:
+        ans = min(ans, sum)
+        return
+    dfs(isK, idx+1, sum+arr[idx][0])
+    dfs(isK, idx+2, sum+arr[idx][1])
+    if not isK:
+        dfs(True, idx+3, sum+k)
 
-try:
-    dp[0][0] = dp[1][0] = arr[0][0]
-    dp[2][0] = min(dp[1][0] + arr[1][1], dp[1][0] + arr[1][0])
-    dp[3][0] = min(dp[2][0] + arr[2][0], dp[1][0] + arr[2][1])
-    dp[3][1] = k
-except:
-    None
-
-for i in range(4, n):
-    dp[i][0] = min(dp[i-1][0] + arr[i-1][0], dp[i-2][0] + arr[i-2][0])
-    dp[i][1] = min(dp[i-1][1] + arr[i-1][0], dp[i-2][1] + arr[i-2][0], dp[i-3][0] + k)
-
-print(min(dp[n-1]))
+dfs(False, 0, 0)
+print(ans)
