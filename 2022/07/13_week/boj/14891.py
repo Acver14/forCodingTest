@@ -15,16 +15,20 @@ def rotate(arr, dir):
 for num, dir in order:
     num -= 1
     rdir = dir
+    prev = arr[num][2]
     for i in range(num, 3):
         rdir *= -1
-        if arr[i][2] != arr[i+1][6]:
+        if prev != arr[i+1][6]:
+            prev = arr[i+1][2]
             arr[i+1] = rotate(arr[i+1], rdir)
             continue
         break
     ldir = dir
+    prev = arr[num][6]
     for i in range(num, 0, -1):
         ldir *= -1
-        if arr[i][6] != arr[i-1][2]:
+        if prev != arr[i-1][2]:
+            prev = arr[i-1][6]
             arr[i-1] = rotate(arr[i-1], ldir)
             continue
         break
