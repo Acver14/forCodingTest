@@ -1,4 +1,3 @@
-import sys
 S = list(input())
 T = list(input())
 
