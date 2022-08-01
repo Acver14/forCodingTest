@@ -1,10 +1,12 @@
 N = int(input())
 arr = list(map(int, input().split()))
-dp = [0 for _ in range(N)]
-
+dp = [0, 0]
+_max = 0
 for i in range(1, N):
-    if arr[i] > dp[i-1]:
-        dp[i] = dp[i-1]+1
+    idx = i % 2
+    if arr[i] > dp[idx-1]:
+        dp[idx] = dp[idx-1]+1
     else:
-        dp[i] = arr[i]
-print(max(dp))
+        dp[idx] = arr[i]
+    _max = max(_max, dp[idx])
+print(_max)
