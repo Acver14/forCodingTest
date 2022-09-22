@@ -1,28 +1,26 @@
-from collections import deque
-import sys
-sys.setrecursionlimit(1000000)
-input = sys.stdin.readline
 N = int(input())
-card = list(map(int, input().split()))
-ans = 0
+arr = list(map(int, input().split()))
 
-def func(flag, sum1, sum2, card_list, front, back):
-    global ans
-    if front < back:
-        if flag:
-            num1, num2 = card_list[back], card_list[back-1]
-            func(flag, sum1+num1, sum2+num2, card_list, front, back-2)
-        else:
-            num1, num2 = card_list[back], card_list[back-1]
-            func(flag, sum1+num1, sum2+num2, card_list, front, back-2)
-            
-            num1, num2 = card_list[front], card_list[back]
-            func(True, sum1+num1, sum2+num2, card_list, front+1, back-1)
-            
-            num1, num2 = card_list[back], card_list[front]
-            func(True, sum1+num1, sum2+num2, card_list, front+1, back-1)
-    else:
-        ans = max(ans, sum1)
-        
-func(False, 0, 0, card, 0, N-1)
+# 밑장 빼기를 안했을 때 정훈이 카드의 합
+junghun_origin_sum = 0
+for i in range(N):
+    if i % 2 == 0:
+        junghun_origin_sum += arr[i]
+ans = junghun_origin_sum
+junghun_sum = junghun_origin_sum
+
+# (정훈이 차례에서) 맨 아래에서부터 밑장 빼기 했을 때 합 어떤지
+for i in range(N-1, 0, -2):
+    junghun_sum += arr[i]
+    junghun_sum -= arr[i-1]
+    ans = max(ans, junghun_sum)
+
+
+junghun_sum = junghun_origin_sum
+# 상대 차례에서 맨 아래부터 밑장 빼기를 했을 때 합이 어떤지
+for i in range(N-2, 1, -2):
+    junghun_sum -= arr[i]
+    junghun_sum += arr[i-1]
+    ans = max(ans, junghun_sum)
+
 print(ans)
