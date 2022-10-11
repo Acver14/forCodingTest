@@ -1,0 +1,39 @@
+
+if __name__ == "__main__":
+
+# exception
+import traceback
+try:
+    do_what()
+except:
+    traceback.print_exc()
+    
+# sorting by another array
+X = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+Y = [ 0,   1,   1,    0,   1,   2,   2,   0,   1]
+
+Z = [x for _,x in sorted(zip(Y,X))]
+print(Z)  # ["a", "d", "h", "b", "c", "e", "i", "f", "g"]
+
+# api call
+import requests
+URL = 'http://www.tistory.com'
+response = requests.get(URL)
+response.status_code
+response.text
+
+# get
+headers = {'Content-Type': 'application/json; charset=utf-8'}
+params = {'param1': 'value1', 'param2': 'value'}
+res = requests.get(URL, params=params)
+
+# post
+import requests, json
+headers = {'Content-Type': 'application/json; charset=utf-8'}
+data = {'outer': {'inner': 'value'}}
+res = requests.post(URL, data=json.dumps(data))
+
+res.request # 내가 보낸 request 객체에 접근 가능
+res.status_code # 응답 코드
+res.raise_for_status() # 200 OK 코드가 아닌 경우 에러 발동
+res.json() # json response일 경우 딕셔너리 타입으로 바로 변환
